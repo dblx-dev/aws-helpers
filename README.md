@@ -1,6 +1,6 @@
-# ECS Exec Runbook
+# AWS Exec Runbook
 
-This runbook documents how to configure AWS SSO, set up profiles, and use `aws ecs execute-command` to exec into ECS tasks via AWS CLI.
+This runbook documents how to configure AWS SSO, set up profiles, and exec into running workloads on **ECS** (`aws ecs execute-command`) or **EKS** (`kubectl exec`) via AWS CLI.
 
 ---
 
@@ -30,7 +30,7 @@ This runbook documents how to configure AWS SSO, set up profiles, and use `aws e
 
 ---
 
-### ⚡️ Shortcut: use the helper script
+### ⚡️ Shortcut: ECS helper script
 
 If you don't want to manually look up clusters/tasks every time, use the helper script instead. It auto-discovers the cluster and running task and drops you straight into the `web` container.
 
@@ -50,6 +50,29 @@ chmod +x ./ecs-exec.sh
 # use bash instead of sh if the image has it
 ./ecs-exec.sh --profile <profile> --shell /bin/bash
 ```
+
+### ⚡️ Shortcut: EKS helper script
+
+For EKS, `eks-exec.sh` walks you through cluster → namespace → pod → container and then runs `kubectl exec -it`. It updates your kubeconfig under a profile-scoped context alias (`<profile>-<cluster>`) so it won't clobber existing contexts.
+
+```bash
+# make it executable once
+chmod +x ./eks-exec.sh
+
+# minimal: pick everything interactively
+./eks-exec.sh --profile <profile>
+
+# with explicit region (if your profile doesn't set one)
+./eks-exec.sh --profile <profile> --region eu-west-2
+
+# skip prompts by specifying any of: cluster / namespace / pod / container
+./eks-exec.sh --profile <profile> --cluster <cluster-name> --namespace <ns> --pod <pod> --container <name>
+
+# use sh instead of bash if the image is slim
+./eks-exec.sh --profile <profile> --shell /bin/sh
+```
+
+Requires `kubectl` and `jq` in addition to the AWS CLI (no Session Manager plugin needed for EKS).
 
 ## 🔎 ECS Discovery
 
