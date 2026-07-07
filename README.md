@@ -11,9 +11,10 @@ This runbook documents how to configure AWS SSO, set up profiles, and exec into 
    aws configure sso --profile corp-sso
    ```
 
-2. Generate per-account profiles (using your helper script):
+2. Generate per-account profiles (using your helper script). Pass the name of
+   your `[sso-session ...]` block as the first argument (defaults to `corp-sso`):
    ```bash
-   ./generate-profiles.sh
+   ./generate-profiles.sh <sso-session-name>   # e.g. ./generate-profiles.sh dblx
    ```
 
 3. Login with the desired profile:

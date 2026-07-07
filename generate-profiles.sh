@@ -7,8 +7,8 @@ BACKUP="${HOME}/.aws/config.bak.$(date +%Y%m%d%H%M%S)"
 # Default region for generated profiles (workloads, e.g. EC2/S3 calls)
 DEFAULT_REGION="${DEFAULT_REGION:-eu-west-2}"
 
-# sso-session name to use
-SESSION_NAME="${SESSION_NAME:-corp-sso}"
+# sso-session name to use: first positional arg, else $SESSION_NAME, else default
+SESSION_NAME="${1:-${SESSION_NAME:-corp-sso}}"
 
 JQ_BIN="${JQ_BIN:-jq}"
 
